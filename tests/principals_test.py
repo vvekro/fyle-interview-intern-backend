@@ -60,3 +60,24 @@ def test_regrade_assignment(client, h_principal):
 
     assert response.json['data']['state'] == AssignmentStateEnum.GRADED.value
     assert response.json['data']['grade'] == GradeEnum.B
+
+
+def test_get_staff(client, h_principal):
+    """
+    added test to fetch the list of teachers for the principal.
+    """
+    response = client.get(
+        '/principal/staff',
+        headers=h_principal
+    )
+
+    assert response.status_code == 200
+    
+    data = response.json['data']
+    assert isinstance(data, list)
+
+    for teacher in data:
+        assert 'id' in teacher
+        assert 'user_id' in teacher
+        assert 'created_at' in teacher
+        assert 'updated_at' in teacher
