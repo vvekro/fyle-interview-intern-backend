@@ -32,7 +32,7 @@ class Assignment(db.Model):
     updated_at = db.Column(db.TIMESTAMP(timezone=True), default=helpers.get_utc_now, nullable=False, onupdate=helpers.get_utc_now)
 
     def __repr__(self):
-        return '<Assignment %r>' % self.id
+        return f'Assignment(id={self.id}, student_id={self.student_id}, teacher_id={self.teacher_id}, grade={self.grade}, state={self.state})'
 
     @classmethod
     def filter(cls, *criterion):
@@ -105,6 +105,7 @@ class Assignment(db.Model):
     @classmethod
     def principal_regrade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
+        print(assignment)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.grade is not None, 'assignment with empty grade cannot be graded')
         assertions.assert_valid(assignment.teacher_id is not None, 'no teacher assigned')
