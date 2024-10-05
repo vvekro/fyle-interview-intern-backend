@@ -105,7 +105,7 @@ class Assignment(db.Model):
     @classmethod
     def principal_regrade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
-        print(assignment)
+        #print(assignment)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.grade is not None, 'assignment with empty grade cannot be graded')
         assertions.assert_valid(assignment.teacher_id is not None, 'no teacher assigned')
