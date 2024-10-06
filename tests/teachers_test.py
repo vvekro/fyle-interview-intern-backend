@@ -1,3 +1,40 @@
+import random
+from core import db
+from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
+
+
+def new_ungraded_assignment(teacher_id: int = 3) -> int:
+    """
+    Creates an ungraded assignment for a specified teacher and returns the count of assignments with grade 'A'.
+
+    Parameters:
+    - teacher_id (int): The ID of the teacher for whom the assignments are created.
+
+    Returns:
+    - assignment.id(int): the id of the assignment generated
+    """
+
+    # Create ungraded assignment
+    grade = None
+
+    # Create a new Assignment instance
+    assignment = Assignment(
+        teacher_id=teacher_id,
+        student_id=3,
+        grade=grade,
+        content='test content',
+        state=AssignmentStateEnum.SUBMITTED,
+    )
+
+    # Add the assignment to the database session
+    db.session.add(assignment)
+
+    # Commit changes to the database
+    db.session.commit()
+
+    return assignment.id
+
+
 def test_get_assignments_teacher_1(client, h_teacher_1):
     response = client.get(
         '/teacher/assignments',
@@ -99,3 +136,19 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+
+def test_grade_assignment_success(client, h_teacher_3):
+    """
+    tests whether submitted assignments are graded successfully
+    """
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_3
+        , json={
+            "id": new_ungraded_assignment(3),
+            "grade": "A"
+        }
+    )
+    assert response.status_code == 200

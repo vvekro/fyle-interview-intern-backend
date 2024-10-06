@@ -55,20 +55,23 @@ def upgrade():
 
     student_1 = Student(user_id=User.get_by_email('student1@fylebe.com').id)
     student_2 = Student(user_id=User.get_by_email('student2@fylebe.com').id)
+    student_3 = Student(user_id=User.get_by_email('student3@fylebe.com').id)
     teacher_1 = Teacher(user_id=User.get_by_email('teacher1@fylebe.com').id)
     teacher_2 = Teacher(user_id=User.get_by_email('teacher2@fylebe.com').id)
+    teacher_3 = Teacher(user_id=User.get_by_email('teacher3@fylebe.com').id)
 
     db.session.add(student_1)
     db.session.add(student_2)
+    db.session.add(student_3)
     db.session.add(teacher_1)
     db.session.add(teacher_2)
+    db.session.add(teacher_3)
     db.session.flush()
 
     assignment_1 = Assignment(student_id=student_1.id, content='ESSAY T1')
     assignment_2 = Assignment(student_id=student_1.id, content='THESIS T1')
     assignment_3 = Assignment(student_id=student_2.id, content='ESSAY T2')
     assignment_4 = Assignment(student_id=student_2.id, content='THESIS T2', grade=GradeEnum.D)
-
     assignment_5 = Assignment(student_id=student_1.id, content='SOLUTION T1')
 
     db.session.add(assignment_1)

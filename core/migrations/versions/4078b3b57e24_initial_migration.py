@@ -33,13 +33,17 @@ def upgrade():
 
     student_user_1 = User(email='student1@fylebe.com', username='student1')
     student_user_2 = User(email='student2@fylebe.com', username='student2')
+    student_user_3 = User(email='student3@fylebe.com', username='student3')
     teacher_user_1 = User(email='teacher1@fylebe.com', username='teacher1')
     teacher_user_2 = User(email='teacher2@fylebe.com', username='teacher2')
+    teacher_user_3 = User(email='teacher3@fylebe.com', username='teacher3')
 
     db.session.add(student_user_1)
     db.session.add(student_user_2)
+    db.session.add(student_user_3)
     db.session.add(teacher_user_1)
     db.session.add(teacher_user_2)
+    db.session.add(teacher_user_3)
     db.session.commit()
     # ### end Alembic commands ###
 
