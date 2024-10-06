@@ -67,7 +67,7 @@ def test_get_staff(client, h_principal):
     added test to fetch the list of teachers for the principal.
     """
     response = client.get(
-        '/principal/staff',
+        '/principal/teachers',
         headers=h_principal
     )
 

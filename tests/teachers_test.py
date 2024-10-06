@@ -1,11 +1,10 @@
-import random
 from core import db
 from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
 
 
 def new_ungraded_assignment(teacher_id: int = 3) -> int:
     """
-    Creates an ungraded assignment for a specified teacher and returns the count of assignments with grade 'A'.
+    Creates an ungraded assignment for a specified teacher and returns the id of the assignment.
 
     Parameters:
     - teacher_id (int): The ID of the teacher for whom the assignments are created.
@@ -33,6 +32,30 @@ def new_ungraded_assignment(teacher_id: int = 3) -> int:
     db.session.commit()
 
     return assignment.id
+
+
+from core.models.assignments import Assignment, AssignmentStateEnum
+
+def get_submitted_assignment_id(teacher_id: int = 3):
+    """
+    Fetches the ID of the first assignment with a given teacher_id
+    and a state of 'SUBMITTED'.
+
+    Parameters:
+    - teacher_id (int): The ID of the teacher whose assignments we are querying.
+
+    Returns:
+    - assignment.id (int): The ID of the matching assignment, or None if no match is found.
+    """
+    # Query the first assignment that matches the teacher_id and state
+    assignment = Assignment.query.filter_by(
+        teacher_id=teacher_id, 
+        state=AssignmentStateEnum.GRADED
+    ).first()
+    print(f"assignment value:{assignment.id}")
+
+    # Return the assignment ID if found, else return None
+    return assignment.id if assignment else None
 
 
 def test_get_assignments_teacher_1(client, h_teacher_1):
@@ -152,3 +175,21 @@ def test_grade_assignment_success(client, h_teacher_3):
         }
     )
     assert response.status_code == 200
+
+
+def test_teacher_regrade(client, h_teacher_3):
+    """
+    tests whether submitted assignments are graded successfully
+    """
+    
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_3
+        , json={
+            "id": get_submitted_assignment_id(),
+            "grade": "A"
+        }
+    )
+    assert response.status_code == 400
+    data = response.json
+    assert data['error'] == 'FyleError'

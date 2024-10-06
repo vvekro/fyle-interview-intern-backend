@@ -79,7 +79,7 @@ class Assignment(db.Model):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.teacher_id == auth_principal.teacher_id,'assignment is not assigned to this teacher')
-        assertions.assert_valid(assignment.state == AssignmentStateEnum.SUBMITTED,'anError')
+        assertions.assert_valid(assignment.state == AssignmentStateEnum.SUBMITTED,'assignment has already been graded')
         
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED
@@ -104,7 +104,7 @@ class Assignment(db.Model):
     @classmethod
     def principal_regrade(cls, _id, grade, auth_principal: AuthPrincipal):
         assignment = Assignment.get_by_id(_id)
-        #print(assignment)
+        assertions.assert_auth(auth_principal.principal_id is not None, 'Only principals can re-grade assignments')
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.grade is not None, 'assignment with empty grade cannot be graded')
         assertions.assert_valid(assignment.teacher_id is not None, 'no teacher assigned')
