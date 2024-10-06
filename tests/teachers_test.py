@@ -50,7 +50,6 @@ def get_submitted_assignment_id(teacher_id: int = 3):
         teacher_id=teacher_id, 
         state=AssignmentStateEnum.GRADED
     ).first()
-    print(f"assignment value:{assignment.id}")
 
     # Return the assignment ID if found, else return None
     return assignment.id if assignment else None
