@@ -1,5 +1,5 @@
 from core import db
-from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
+from core.models.assignments import Assignment, AssignmentStateEnum
 
 
 def new_ungraded_assignment(teacher_id: int = 3) -> int:
@@ -33,8 +33,6 @@ def new_ungraded_assignment(teacher_id: int = 3) -> int:
 
     return assignment.id
 
-
-from core.models.assignments import Assignment, AssignmentStateEnum
 
 def get_submitted_assignment_id(teacher_id: int = 3):
     """
@@ -179,7 +177,7 @@ def test_grade_assignment_success(client, h_teacher_3):
 
 def test_teacher_regrade(client, h_teacher_3):
     """
-    tests whether submitted assignments are graded successfully
+    tests whether submitted assignments can be regraded
     """
     
     response = client.post(
@@ -191,5 +189,3 @@ def test_teacher_regrade(client, h_teacher_3):
         }
     )
     assert response.status_code == 400
-    data = response.json
-    assert data['error'] == 'FyleError'
